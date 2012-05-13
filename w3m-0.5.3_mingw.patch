@@ -1,0 +1,127 @@
+*** Str.c	Wed Dec 25 02:20:46 2002
+--- Str_mod.c	Sat May 12 17:39:56 2012
+***************
+*** 68,74 ****
+      x->ptr = GC_MALLOC_ATOMIC(n);
+      x->area_size = n;
+      x->length = n - 1;
+!     bcopy((void *)p, (void *)x->ptr, n);
+      return x;
+  }
+  
+--- 68,74 ----
+      x->ptr = GC_MALLOC_ATOMIC(n);
+      x->area_size = n;
+      x->length = n - 1;
+!     memcpy((void *)x->ptr, (void *)p, n);
+      return x;
+  }
+  
+***************
+*** 97,103 ****
+      x->ptr = GC_MALLOC_ATOMIC(n + 1);
+      x->area_size = n + 1;
+      x->length = n;
+!     bcopy((void *)p, (void *)x->ptr, n);
+      x->ptr[n] = '\0';
+      return x;
+  }
+--- 97,103 ----
+      x->ptr = GC_MALLOC_ATOMIC(n + 1);
+      x->area_size = n + 1;
+      x->length = n;
+!     memcpy((void *)x->ptr, (void *)p, n);
+      x->ptr[n] = '\0';
+      return x;
+  }
+***************
+*** 135,141 ****
+  	x->ptr = GC_MALLOC_ATOMIC(y->length + 1);
+  	x->area_size = y->length + 1;
+      }
+!     bcopy((void *)y->ptr, (void *)x->ptr, y->length + 1);
+      x->length = y->length;
+  }
+  
+--- 135,141 ----
+  	x->ptr = GC_MALLOC_ATOMIC(y->length + 1);
+  	x->area_size = y->length + 1;
+      }
+!     memcpy((void *)x->ptr, (void *)y->ptr, y->length + 1);
+      x->length = y->length;
+  }
+  
+***************
+*** 155,161 ****
+  	x->ptr = GC_MALLOC_ATOMIC(len + 1);
+  	x->area_size = len + 1;
+      }
+!     bcopy((void *)y, (void *)x->ptr, len + 1);
+      x->length = len;
+  }
+  
+--- 155,161 ----
+  	x->ptr = GC_MALLOC_ATOMIC(len + 1);
+  	x->area_size = len + 1;
+      }
+!     memcpy((void *)x->ptr, (void *)y, len + 1);
+      x->length = len;
+  }
+  
+***************
+*** 174,180 ****
+  	x->ptr = GC_MALLOC_ATOMIC(len + 1);
+  	x->area_size = len + 1;
+      }
+!     bcopy((void *)y, (void *)x->ptr, n);
+      x->ptr[n] = '\0';
+      x->length = n;
+  }
+--- 174,180 ----
+  	x->ptr = GC_MALLOC_ATOMIC(len + 1);
+  	x->area_size = len + 1;
+      }
+!     memcpy((void *)x->ptr, (void *)y, n);
+      x->ptr[n] = '\0';
+      x->length = n;
+  }
+***************
+*** 193,202 ****
+  	newlen = newlen * 3 / 2;
+  	x->ptr = GC_MALLOC_ATOMIC(newlen);
+  	x->area_size = newlen;
+! 	bcopy((void *)old, (void *)x->ptr, x->length);
+  	GC_free(old);
+      }
+!     bcopy((void *)y, (void *)&x->ptr[x->length], n);
+      x->length += n;
+      x->ptr[x->length] = '\0';
+  }
+--- 193,202 ----
+  	newlen = newlen * 3 / 2;
+  	x->ptr = GC_MALLOC_ATOMIC(newlen);
+  	x->area_size = newlen;
+! 	memcpy((void *)x->ptr, (void *)old, x->length);
+  	GC_free(old);
+      }
+!     memcpy((void *)&x->ptr[x->length], (void *)y, n);
+      x->length += n;
+      x->ptr[x->length] = '\0';
+  }
+***************
+*** 237,243 ****
+  	newlen += 2;
+      x->ptr = GC_MALLOC_ATOMIC(newlen);
+      x->area_size = newlen;
+!     bcopy((void *)old, (void *)x->ptr, x->length);
+      GC_free(old);
+  }
+  
+--- 237,243 ----
+  	newlen += 2;
+      x->ptr = GC_MALLOC_ATOMIC(newlen);
+      x->area_size = newlen;
+!     memcpy((void *)x->ptr, (void *)old, x->length);
+      GC_free(old);
+  }
+  
